@@ -73,7 +73,7 @@ extern "C"
 	- output (Output): where decoded data stores into
 	- returns the size
 */
-unsigned long long decode_variable_size_byte_unsigned(const unsigned char *src, unsigned long long *output)
+size_t decode_variable_size_byte_unsigned(const unsigned char *src, unsigned long long *output)
 {
 	unsigned long long in = *src;
 	if (in & 0x80) // multi-byte flag?
@@ -96,7 +96,7 @@ unsigned long long decode_variable_size_byte_unsigned(const unsigned char *src, 
 	return 1;
 }
 
-unsigned long long decode_variable_size_byte_signed(const unsigned char *src, signed long long *output)
+size_t decode_variable_size_byte_signed(const unsigned char *src, signed long long *output)
 {
 	unsigned long long in = 0; // data from file
 	size_t size = decode_variable_size_byte_unsigned(src, &in);
@@ -121,7 +121,7 @@ unsigned long long decode_variable_size_byte_signed(const unsigned char *src, si
 	- input (Input): data to encode
 	- returns the size
 */
-unsigned long long encode_variable_size_byte_unsigned(unsigned char *dst, unsigned long long input)
+size_t encode_variable_size_byte_unsigned(unsigned char *dst, unsigned long long input)
 {
 	if (input < 0x80) // 0-7f : Single byte
 	{
@@ -134,7 +134,7 @@ unsigned long long encode_variable_size_byte_unsigned(unsigned char *dst, unsign
 		unsigned long long tmp = 0x80;
 		int adj = 7;
 		int siz = 0;
-		unsigned long long ret = 0;
+		size_t ret = 0;
 		while (input >= tmp)
 		{
 			prv = tmp;
@@ -156,7 +156,7 @@ unsigned long long encode_variable_size_byte_unsigned(unsigned char *dst, unsign
 	}
 }
 
-unsigned long long encode_variable_size_byte_signed(unsigned char *dst, signed long long input)
+size_t encode_variable_size_byte_signed(unsigned char *dst, signed long long input)
 {
 	unsigned char sign = 0;       // sign bit
 	if (input < 0) // input is negative?
